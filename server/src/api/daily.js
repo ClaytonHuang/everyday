@@ -14,9 +14,8 @@ var dailyRouter = new Router()
 dailyRouter.get('/today', ctx => {
   try {
     var res = { result: true }
-    const url =  config.host + '/daily-images/' + moment().format('YYYY-MM-DD') + '.png' 
+    const url =  config.host + 'daily-images/' + moment().format('YYYY-MM-DD') + '.png' 
     res.url = url
-    console.log(JSON.stringify(res))
     ctx.response.body = JSON.stringify(res)
   } catch (err) {
     console.log(err)

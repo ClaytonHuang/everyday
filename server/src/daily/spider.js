@@ -65,7 +65,7 @@ saveImage2Static = async (htmlPath) => {
   var page = await instance.createPage()
   await page.property({ width: 1024, height: 800 });
 
-  const status = await page.open('http://127.0.0.1:3030')
+  const status = await page.open(config.host)
   const saveImagePath = basePath + 'daily-images/' + moment().format('YYYY-MM-DD') + '.png' 
   await page.render(saveImagePath, {format: 'png', quality: '80'});
   await instance.exit();

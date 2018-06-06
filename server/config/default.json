@@ -2,7 +2,7 @@
   "port": 3030,
   "basePath": "./static/",
   "dailyBaseUrl": "http://www.tuweng.com/",
-  "host": "127.0.0.1:3030",
+  "host": "127.0.0.1:3030/",
   "redis": {
     
   }
