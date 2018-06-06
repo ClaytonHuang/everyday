@@ -1,6 +1,7 @@
 .DS_Store
 /server/node_modules
-/server/package-lock.json
 
 /wxapp/node_modules
-/wxapp/package-lock.json
+
+*.html
+*.png
