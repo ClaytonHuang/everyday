@@ -4,6 +4,8 @@ const cheerio = require('cheerio')
 const phantom = require('phantom')
 const iconv = require('iconv-lite')
 const config = require('config')
+const moment = require('moment')
+
 const baseUrl = config.dailyBaseUrl
 const basePath = config.basePath
 
@@ -53,9 +55,8 @@ getContentHtml = (dailyUrl) => {
 }
 
 transferHtml2JPG = async (htmlContent) => {
-  const htmlPath = basePath + 'static/index.html' 
+  const htmlPath = basePath + 'index.html' 
   fs.writeFileSync(htmlPath, htmlContent, 'utf-8')
-  console.log('save html done')
   await saveImage2Static(htmlPath)
 }
 
@@ -65,9 +66,10 @@ saveImage2Static = async (htmlPath) => {
   await page.property({ width: 1024, height: 800 });
 
   const status = await page.open('http://127.0.0.1:3030')
-  console.log(status)
-  await page.render(basePath + 'static/index.png', {format: 'png', quality: '80'});
+  const saveImagePath = basePath + 'daily-images/' + moment().format('YYYY-MM-DD') + '.png' 
+  await page.render(saveImagePath, {format: 'png', quality: '80'});
   await instance.exit();
+  console.log(status)
 }
 
 module.exports.getDailyPage = getDailyPage

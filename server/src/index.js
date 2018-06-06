@@ -5,7 +5,8 @@ const serve = require('koa-static')
 const config = require('config')
 
 const { wxRouter } = require('./api/wx')
-// const { dailyRouter } = require('./api/daily')
+const { dailyRouter } = require('./api/daily')
+
 const spider = require('./daily')
 
 var app = new Koa()
@@ -18,7 +19,8 @@ router.use('/api/wx', wxRouter.routes(), wxRouter.allowedMethods())
 /**
  * 获取每日图文链接的公共接口
  */
-// router.use('/api/daily/', dailyRouter.routes(), dailyRouter.allowedMethods())
+router.use('/api/daily', dailyRouter.routes(), dailyRouter.allowedMethods())
+
 // 加载上面两个路由
 app.use(router.routes(), router.allowedMethods())
 /**

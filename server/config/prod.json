@@ -1,7 +1,8 @@
 {
   "port": 3030,
-  "basePath": "./",
+  "basePath": "./static/",
   "dailyBaseUrl": "http://www.tuweng.com/",
+  "host": "https://www.clayhuang.cn",
   "redis": {
     
   }
