@@ -1,0 +1,8 @@
+{
+  "port": 3030,
+  "basePath": "./",
+  "dailyBaseUrl": "http://www.tuweng.com/",
+  "redis": {
+    
+  }
+}
