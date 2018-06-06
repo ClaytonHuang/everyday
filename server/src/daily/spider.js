@@ -42,8 +42,9 @@ getContentHtml = (dailyUrl) => {
       // 对页面内容进行一些调整
       $('.maintit').css('text-align', 'center')
       $('.sendvalue > strong > a').removeAttr('href')
-      $('#DocContent').css('width', '80%')
-      $('#DocContent').css('padding', '3% 10% 0')
+      $('#DocContent').css('width', '90%')
+      $('#DocContent').css('height', '100%')
+      $('#DocContent').css('padding', '3% 5% 0')
       $('#DocContent').css('background-color', 'white')
       $('p > br').remove()
       $('#copy').remove()
@@ -65,12 +66,12 @@ transferHtml2JPG = async (htmlContent) => {
 saveImage2Static = async (htmlPath) => {
   var instance = await phantom.create()
   var page = await instance.createPage()
-  await page.property({ width: 1280, height: 800 });
+  await page.property({ width: 1024, height: 800 });
 
   const status = await page.open(config.host)
   const saveImagePath = basePath + 'daily-images/' + moment().format('YYYY-MM-DD') + '.jpg' 
   await page.render(saveImagePath, {format: 'jpg', quality: '70'});
-  await instance.exit();
+  await instance.exit()
   console.log(status)
 }
 
