@@ -44,6 +44,7 @@ getContentHtml = (dailyUrl) => {
       $('.sendvalue > strong > a').removeAttr('href')
       $('#DocContent').css('width', '80%')
       $('#DocContent').css('padding', '3% 10% 0')
+      $('#DocContent').css('background-color', 'white')
       $('p > br').remove()
       $('#copy').remove()
       $('.icons').remove()
@@ -67,8 +68,8 @@ saveImage2Static = async (htmlPath) => {
   await page.property({ width: 1024, height: 800 });
 
   const status = await page.open(config.host)
-  const saveImagePath = basePath + 'daily-images/' + moment().format('YYYY-MM-DD') + '.png' 
-  await page.render(saveImagePath, {format: 'png', quality: '80'});
+  const saveImagePath = basePath + 'daily-images/' + moment().format('YYYY-MM-DD') + '.jpg' 
+  await page.render(saveImagePath, {format: 'jpg', quality: '70'});
   await instance.exit();
   console.log(status)
 }

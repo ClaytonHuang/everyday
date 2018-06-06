@@ -6,7 +6,7 @@ const moment = require('moment')
 // 判断redis中是否有链接数据，没有则首先爬取一次
 var existTodayLink = false
 try {
-  fs.statSync(config.basePath + 'daily-images/' + moment().format('YYYY-MM-DD') + '.png')
+  fs.statSync(config.basePath + 'daily-images/' + moment().format('YYYY-MM-DD') + '.jpg')
   existTodayLink = true
 } catch (err) {
   console.log(err)
