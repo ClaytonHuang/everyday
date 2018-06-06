@@ -8,6 +8,7 @@ const moment = require('moment')
 
 const baseUrl = config.dailyBaseUrl
 const basePath = config.basePath
+phantom.outputEncoding='gbk'
 
 getDailyPage = () => {
   http.get(baseUrl, res => {
