@@ -4,7 +4,13 @@ const config = require('config')
 const { getDailyPage } = require('./spider')
 const moment = require('moment')
 // 判断redis中是否有链接数据，没有则首先爬取一次
-var existTodayLink = fs.statSync(config.basePath + 'daily-images/' + moment().format('YYYY-MM-DD') + '.png')
+var existTodayLink = false
+try {
+  fs.statSync(config.basePath + 'daily-images/' + moment().format('YYYY-MM-DD') + '.png')
+  existTodayLink = true
+} catch (err) {
+  console.log(err)
+}
 if (existTodayLink) {
   console.log('existed')
 } else {
