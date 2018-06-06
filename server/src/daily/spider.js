@@ -65,7 +65,7 @@ transferHtml2JPG = async (htmlContent) => {
 saveImage2Static = async (htmlPath) => {
   var instance = await phantom.create()
   var page = await instance.createPage()
-  await page.property({ width: 1024, height: 800 });
+  await page.property({ width: 1280, height: 800 });
 
   const status = await page.open(config.host)
   const saveImagePath = basePath + 'daily-images/' + moment().format('YYYY-MM-DD') + '.jpg' 
