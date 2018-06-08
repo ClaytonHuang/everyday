@@ -10,7 +10,7 @@ const EVERYDAY = 'everyday'
 /**
  * 将今日的图片链接、宽高的像素尺寸存入Redis
  */
-setToday2Redis = async (url, height, width) => {
+setToday2Redis = async (url, width, height) => {
   const res = await client.set(TODAY, url)
   console.log(res)
 }
@@ -23,7 +23,7 @@ getTodayFromRedis = async () => {
 /**
  * 将历史文章数据和宽高尺寸存入Rides
  */
-setEveryday2Redis = async (url, height, width) => {
+setEveryday2Redis = async (url, width, height) => {
   try {
     const value = JSON.stringify({height, width})
     var dict = {}
