@@ -12,6 +12,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "config": "^1.30.0",
+    "get-pixels": "^3.3.0",
     "iconv": "^2.3.0",
     "iconv-lite": "^0.4.23",
     "koa": "^2.5.1",

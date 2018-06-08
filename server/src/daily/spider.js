@@ -45,13 +45,13 @@ getContentHtml = (dailyUrl) => {
       $('#DocContent').css('width', '90%')
       $('#DocContent').css('height', '100%')
       $('#DocContent').css('padding', '3% 5% 0')
-      $('#DocContent').css('background-color', 'white')
       $('p > br').remove()
       $('#copy').remove()
       $('.icons').remove()
 
       // 获取文本内容
-      var htmlContent = $('#neirong').html()
+      var htmlContent = $('#container').html()
+      htmlContent = '<body style="background-color: white;">' + htmlContent + '</body>'
       transferHtml2JPG(htmlContent)
     })
   })
