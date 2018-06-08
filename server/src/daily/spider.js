@@ -5,9 +5,13 @@ const phantom = require('phantom')
 const iconv = require('iconv-lite')
 const config = require('config')
 const moment = require('moment')
+var getPixels = require("get-pixels")
 
 const baseUrl = config.dailyBaseUrl
 const basePath = config.basePath
+
+const { setToday2Redis, setEveryday2Redis } = require('./client')
+
 phantom.outputEncoding='gbk'
 
 getDailyPage = () => {
@@ -68,11 +72,28 @@ saveImage2Static = async (htmlPath) => {
   var page = await instance.createPage()
   await page.property({ width: 1024, height: 800 });
 
-  const status = await page.open(config.host)
+  const status = await page.open(config.indexUrl)
   const saveImagePath = basePath + 'daily-images/' + moment().format('YYYY-MM-DD') + '.jpg' 
   await page.render(saveImagePath, {format: 'jpg', quality: '70'});
   await instance.exit()
+
   console.log(status)
+  if (status === 'success') {
+    getPixels(saveImagePath, function(err, pixels) {
+      if(err) {
+        console.log("Bad image path")
+        return
+      }
+      const imageShape = pixels.shape.slice()
+      // TODO config中的
+      const url = config.host + 'daily-images/' + moment().format('YYYY-MM-DD') + '.jpg'
+      const width = imageShape[0]
+      const height = imageShape[1]
+      console.log({url, width, height})
+      setToday2Redis(url, width, height)
+      setEveryday2Redis(url, width, height)
+    })
+  }
 }
 
 module.exports.getDailyPage = getDailyPage

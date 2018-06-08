@@ -1,7 +1,7 @@
 const Router = require('koa-router')
 const moment = require('moment')
 const config = require('config')
-
+const {getTodayFromRedis, getEverydayFromRedis} = require('../daily/client')
 var dailyRouter = new Router()
 
 /**
@@ -11,11 +11,19 @@ var dailyRouter = new Router()
  *    url: 'xxxx'
  * }
  */
-dailyRouter.get('/today', ctx => {
+dailyRouter.get('/today', async ctx => {
   try {
-    var res = { result: true }
-    const url =  config.host + 'daily-images/' + moment().format('YYYY-MM-DD') + '.jpg' 
+    var res = { result: false }
+    const url = await getTodayFromRedis()
+    if (!url) {
+      res.msg = 'No article today!'
+      ctx.response.body = JSON.stringify(res)
+      return
+    }
+    const shape = await getEverydayFromRedis(url)
     res.url = url
+    res.shape = JSON.parse(shape)
+    res.result = true
     ctx.response.body = JSON.stringify(res)
   } catch (err) {
     console.log(err)

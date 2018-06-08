@@ -3,7 +3,6 @@ const fs = require('fs')
 const config = require('config')
 const { getDailyPage } = require('./spider')
 const moment = require('moment')
-var getPixels = require("get-pixels")
 
 // 判断redis中是否有链接数据，没有则首先爬取一次
 // var existTodayLink = false
@@ -20,13 +19,6 @@ var getPixels = require("get-pixels")
 // }
 getDailyPage()
 
-getPixels(config.basePath + 'daily-images/' + '2018-06-06.jpg', function(err, pixels) {
-  if(err) {
-    console.log("Bad image path")
-    return
-  }
-  console.log(pixels)
-})
 /**
  * 定时任务
  * 每天凌晨12点爬取数据

@@ -2,7 +2,8 @@
   "port": 3030,
   "basePath": "./static/",
   "dailyBaseUrl": "http://www.tuweng.com/",
-  "host": "http://localhost:3030",
+  "indexUrl": "http://localhost:3030", 
+  "host": "http://localhost:3030/",
   "redis": {
     
   }
