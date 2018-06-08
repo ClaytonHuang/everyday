@@ -6,18 +6,26 @@
 import today from '@/components/today'
 
 export default {
-  data: {
-    dailyUrl: 'https://www.clayhuang.cn/everyday/daily-images/2018-06-08.jpg',
-    height: 1800
+  data () {
+    return {
+      dailyUrl: '',
+      height: 3420
+    }
   },
   components: {
     today
   },
   onLoad: function (options) {
+    var that = this
     wx.request({
       url: 'https://www.clayhuang.cn/everyday/api/daily/today',
       success: function (res) {
-        console.log(res)
+        const data = res.data
+        if (data.result) {
+          that.dailyUrl = data.url
+        } else {
+          console.log('error')
+        }
       }
     })
   }
