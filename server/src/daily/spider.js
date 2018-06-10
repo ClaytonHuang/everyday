@@ -1,4 +1,3 @@
-const http = require('http')
 const rp = require('request-promise')
 const fs = require('fs')
 const cheerio = require('cheerio')
@@ -61,20 +60,30 @@ getEverydayPage = () => {
  * 获取今日的图文内容
  */
 getToday = async () => {
-  const dailyUrl = await getTodayFromEverydaylist()
+  var dailyUrl = await getTodayFromEverydaylist()
+  dailyUrl = dailyUrl || 'http://www.tuweng.com/culture/8381.html'
   getContent2Image(dailyUrl)
 }
 
 getContent2Image = (dailyUrl) => {
-  http.get(dailyUrl, res => {
-    var html = ''
-    var size = 0
-    res.on('data', chunk => {
-      html += iconv.decode(chunk, 'GBK')
-    })
-    res.on('end', () => {
-      var $ = cheerio.load(html)
-      // 对页面内容进行一些调整
+  console.log('today')
+  console.log(dailyUrl)
+  try {
+    /**
+     * 改用 request-async，可能可以解决80端口问题？
+     * 1、redis异步和http占用错误、
+     * 2、request-async和http冲突问题
+     */
+    var options = {
+      url: dailyUrl,
+      transform: function (body) {
+        return cheerio.load(body)
+      } 
+    }
+
+    rp(options)
+    .then(function ($) {
+
       $('.maintit').css('text-align', 'center')
       $('.sendvalue > strong > a').removeAttr('href')
       $('#DocContent').css('width', '90%')
@@ -98,15 +107,24 @@ getContent2Image = (dailyUrl) => {
       htmlContent = '<body style="background-color: white;">' + htmlContent + '</body>'
       transferHtml2JPG(htmlContent)
     })
-  })
+    .catch( err => {
+      console.log(' ========== rq error')
+      console.log(err)
+    })
+
+  } catch (err) {
+    console.log(err)
+  }
 }
 
+// 将html转为图片
 transferHtml2JPG = async (htmlContent) => {
   const htmlPath = basePath + 'index.html' 
   fs.writeFileSync(htmlPath, htmlContent, 'utf-8')
   await saveImage2Static(htmlPath)
 }
 
+// 将图片存入本地
 saveImage2Static = async (htmlPath) => {
   var instance = await phantom.create()
   var page = await instance.createPage()
@@ -125,7 +143,7 @@ saveImage2Static = async (htmlPath) => {
         return
       }
       const imageShape = pixels.shape.slice()
-      // TODO config中的
+
       const url = config.host + 'daily-images/' + moment().format('YYYY-MM-DD') + '.jpg'
       const width = imageShape[0]
       const height = imageShape[1]

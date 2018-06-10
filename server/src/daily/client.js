@@ -1,5 +1,5 @@
 const asyncRedis = require("async-redis");
-const client = asyncRedis.createClient();
+const client = asyncRedis.createClient(6379, 'everyday-redis');
 
 client.on('ready', async res => {
   console.log('redis is ready')
