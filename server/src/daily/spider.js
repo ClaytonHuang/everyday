@@ -1,4 +1,5 @@
 const http = require('http')
+const rp = require('request-promise')
 const fs = require('fs')
 const cheerio = require('cheerio')
 const phantom = require('phantom')
@@ -10,31 +11,61 @@ var getPixels = require("get-pixels")
 const baseUrl = config.dailyBaseUrl
 const basePath = config.basePath
 
-const { setToday2Redis, setEveryday2Redis } = require('./client')
+const {   
+  clearEverydayListFromRedis,
+  setEverydayList2Redis,
+  getTodayFromEverydaylist, 
+  setToday2Redis, 
+  setEveryday2Redis } = require('./client')
 
 phantom.outputEncoding='gbk'
 
-getDailyPage = () => {
-  http.get(baseUrl, res => {
-    var chunks = []
-    var size = 0
-    res.on('data', chunk => {
-      chunks.push(chunk)
-      size += chunk.length
-    })
-    res.on('end', () => {
-      var data = Buffer.concat(chunks,size)
-      var html = data.toString()
-      // 完成后，提取每日推荐中的页面信息，可能要注意页面编码
-      var $ = cheerio.load(html)
-      const dailyUrl = $('#mrtj > .pic > a').attr('href')
-      // 加上错误检验
-      const saveResult = getContentHtml(dailyUrl)
-    })
+getEverydayPage = () => {
+
+  clearEverydayListFromRedis()
+  const desDict = {
+    'life/': 39, 
+    'illustrations/': 32, 
+    'culture/': 14,
+    'picture/': 33
+  }
+
+  const desLink = Object.keys(desDict)
+  desLink.forEach(subItem => {
+    const limitPageNum = desDict[subItem]
+    for ( var i = 1; i <= limitPageNum; i++ ) {
+      var pagerUrl = 'http://www.tuweng.com/' + subItem
+      if ( i > 1 ) {
+        pagerUrl += 'index_' + i + '.html'
+      }
+      var options = {
+        url: pagerUrl,
+        transform: function (body) {
+          return cheerio.load(body)
+        }
+      }
+      rp(options)
+        .then(function ($) {1
+          $('.photo').each(function() {
+            const thisHref = this.attribs.href
+            setEverydayList2Redis(thisHref)
+          })
+        })
+        .catch( err => {
+        })
+    }
   })
 }
 
-getContentHtml = (dailyUrl) => {
+/**
+ * 获取今日的图文内容
+ */
+getToday = async () => {
+  const dailyUrl = await getTodayFromEverydaylist()
+  getContent2Image(dailyUrl)
+}
+
+getContent2Image = (dailyUrl) => {
   http.get(dailyUrl, res => {
     var html = ''
     var size = 0
@@ -52,6 +83,15 @@ getContentHtml = (dailyUrl) => {
       $('p > br').remove()
       $('#copy').remove()
       $('.icons').remove()
+
+      // 根据体验问题，修改img size的配置
+      $('img').each( function () {
+        $(this).css('width', '100%')
+        var imgHref = $(this).attr('src')
+        if ( imgHref.indexOf('www.tuweng.com/') < 0 ) {
+          $(this).attr('src', 'http://www.tuweng.com' + imgHref)
+        }
+      })
 
       // 获取文本内容
       var htmlContent = $('#container').html()
@@ -96,4 +136,5 @@ saveImage2Static = async (htmlPath) => {
   }
 }
 
-module.exports.getDailyPage = getDailyPage
+module.exports.getEverydayPage = getEverydayPage
+module.exports.getToday = getToday

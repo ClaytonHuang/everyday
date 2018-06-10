@@ -6,7 +6,23 @@ client.on('ready', async res => {
 })
 
 const TODAY = 'today'
+const EVERYDAYLIST = 'everyday-list'
 const EVERYDAY = 'everyday'
+
+
+/**
+ * 将爬取的所有链接存入redis list
+ */
+clearEverydayListFromRedis = async () => {
+  await client.del(EVERYDAYLIST)
+}
+setEverydayList2Redis = async (url) => {
+  await client.lpush(EVERYDAYLIST, url)
+}
+getTodayFromEverydaylist = async () => {
+  const res = await client.rpoplpush(EVERYDAYLIST, EVERYDAYLIST)
+  return res
+}
 /**
  * 将今日的图片链接、宽高的像素尺寸存入Redis
  */
@@ -58,8 +74,13 @@ getEverydayFromRedis = async (url) => {
 }
 
 module.exports = {
+  clearEverydayListFromRedis,
+  setEverydayList2Redis,
+  getTodayFromEverydaylist,
+
   setToday2Redis,
   getTodayFromRedis,
+  
   setEveryday2Redis,
   getEverydayFromRedis
 }
