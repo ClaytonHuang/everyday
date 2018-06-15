@@ -1,38 +1,35 @@
 <template>
-  <today :dailyUrl='dailyUrl' :height='height'></today>
+  <showaday :dailyUrl='dailyUrl' :height='height'></showaday>
 </template>
 
 <script>
-import today from '@/components/today'
+import showaday from '@/components/showaday'
 
 export default {
   data () {
     return {
-      dailyUrl: '',
-      height: 0
+      dailyUrl: 'http://bpic.ooopic.com/01/24/92/77b1OOOPICe3.jpg!/fw/750/quality/90/unsharp/true/compress/true/watermark/url/bG9nby53YXRlci52NS5wbmc=/repeat/true/align/center/format/webp',
+      height: 650
     }
   },
   components: {
-    today
+    showaday
   },
   onLoad: function (options) {
-    // 域名备案中，用本地接口开发
-    // https://www.clayhuang.cn/everyday
-    var that = this
-    const screenWidth = wx.getSystemInfoSync().windowWidth
-    wx.request({
-      url: 'http://127.0.0.1:3030/api/daily/today',
-      success: function (res) {
-        const data = res.data
-        console.log(data)
-        if (data.result) {
-          that.dailyUrl = data.url
-          that.height = (screenWidth * data.shape.height) / data.shape.width
-        } else {
-          console.log('error')
-        }
-      }
-    })
+    // var that = this
+    // const screenWidth = wx.getSystemInfoSync().windowWidth
+    // wx.request({
+    //   url: 'http://127.0.0.1:3030/api/daily/toay',
+    //   success: function (res) {
+    //     const data = res.data
+    //     if (data.result) {
+    //       that.dailyUrl = data.url
+    //       that.height = (screenWidth * data.shape.height) / data.shape.width
+    //     } else {
+    //       console.log('error')
+    //     }
+    //   }
+    // })
   }
 }
 </script>

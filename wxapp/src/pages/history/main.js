@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: 'Today'
+    navigationBarTitleText: 'Everyday'
   }
 }
