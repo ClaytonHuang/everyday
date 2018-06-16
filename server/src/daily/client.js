@@ -1,5 +1,5 @@
 const asyncRedis = require("async-redis");
-const client = asyncRedis.createClient(6379, 'everyday-redis');
+const client = asyncRedis.createClient(6379, 'localhost');
 
 client.on('ready', async res => {
   console.log('redis is ready')
@@ -23,33 +23,28 @@ getTodayFromEverydaylist = async () => {
   const res = await client.rpoplpush(EVERYDAYLIST, EVERYDAYLIST)
   return res
 }
-/**
- * 将今日的图片链接、宽高的像素尺寸存入Redis
- */
-setToday2Redis = async (url, width, height) => {
-  const res = await client.set(TODAY, url)
-  console.log(res)
-}
-
-getTodayFromRedis = async () => {
-  const res = await client.get(TODAY)
-  return res
-}
 
 /**
- * 将历史文章数据和宽高尺寸存入Rides
+ * 将今日文章的链接和相关数据存入Rides
+ * info = {
+ *  width: 400,
+ *  height: 1800,
+ *  imgurl: // 第一张图片的地址
+ *  title: 文章的标题,
+ *  date: 获取的时间,
+ *  linkurl: 
+ * }
  */
-setEveryday2Redis = async (url, width, height) => {
+setEveryday2Redis = async (date, info) => {
   try {
-    const value = JSON.stringify({height, width})
+    const value = JSON.stringify(info)
     var dict = {}
-    dict[url] = value
+    dict[date] = value
     const res = await client.hgetall(EVERYDAY)
     if (!res) { // 原先没有记录
       await client.hmset(EVERYDAY, dict)
     } else {
-      var history = res
-      res[url] = value
+      res[date] = value
       await client.hmset(EVERYDAY, res) 
     }
     return true
@@ -59,14 +54,37 @@ setEveryday2Redis = async (url, width, height) => {
   }
 }
 
-getEverydayFromRedis = async (url) => {
+getSomedayFromRedis = async (date) => {
   try {
     // 是通用方法，所以采用getall
-    const res = await client.hgetall(EVERYDAY)
+    const res = await client.hget(EVERYDAY, date)
     if (!res) { // 原先没有记录
       return false
     }
-    return res[url]
+    return res
+  } catch (err) {
+    console.log(err)
+    return false
+  }
+}
+
+// TODO: 添加Pager
+getEverydayListFromRedis = async () => {
+  try {
+    const res = await client.hgetall(EVERYDAY)
+    if(!res) {
+      return false
+    }
+    var dateKeys = Object.keys(res)
+    var resultList = {}
+    var count = 0
+    dateKeys.forEach(key => {
+      resultList[key] = JSON.parse(res[key])
+      if (count++ === 10) {
+        return resultList
+      }
+    })
+    return resultList
   } catch (err) {
     console.log(err)
     return false
@@ -78,9 +96,7 @@ module.exports = {
   setEverydayList2Redis,
   getTodayFromEverydaylist,
 
-  setToday2Redis,
-  getTodayFromRedis,
-  
   setEveryday2Redis,
-  getEverydayFromRedis
+  getSomedayFromRedis,
+  getEverydayListFromRedis
 }

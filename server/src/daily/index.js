@@ -4,7 +4,7 @@ const config = require('config')
 const { getEverydayPage, getToday } = require('./spider')
 const moment = require('moment')
 
-getEverydayPage()
+// getEverydayPage()
 getToday()
 
 /**
