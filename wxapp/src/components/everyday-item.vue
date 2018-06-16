@@ -33,13 +33,14 @@ export default {
   max-height: 80%;
   margin-left: 5%;
   overflow:hidden;
+  border-radius:4rpx;
 }
 
 .everyday-item > div {
   display: flex;
   margin-left: 10%;
   max-width: 50%;
-  flex-direction: column
+  flex-direction: column;
 }
 
 .everyday-item > div > p:first-child {

@@ -1,17 +1,17 @@
 <template>
   <div>
-    <everydayitem v-for='iteminfo in everydaylist'
+    <everyday-item v-for='iteminfo in everydaylist'
       :key='iteminfo.uploadtime' 
       :imgurl='iteminfo.imgurl'
       :title='iteminfo.title'
       :uploadtime='iteminfo.uploadtime'
     >
-    </everydayitem>
+    </everyday-item>
   </div>
 </template>
 
 <script>
-import everydayitem from '@/components/everydayitem'
+import everydayItem from '@/components/everyday-item'
 
 export default {
   data () {
@@ -30,7 +30,7 @@ export default {
     }
   },
   components: {
-    everydayitem
+    'everyday-item': everydayItem
   },
   onLoad: function (options) {
     // Get everydaylist

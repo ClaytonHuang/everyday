@@ -1,9 +1,9 @@
 <template>
-  <showaday :dailyUrl='dailyUrl' :height='height'></showaday>
+  <show-oneday :dailyUrl='dailyUrl' :height='height'></show-oneday>
 </template>
 
 <script>
-import showaday from '@/components/showaday'
+import showOneday from '@/components/show-oneday'
 
 export default {
   data () {
@@ -13,7 +13,7 @@ export default {
     }
   },
   components: {
-    showaday
+    'show-oneday': showOneday
   },
   onLoad: function (options) {
     // var that = this
