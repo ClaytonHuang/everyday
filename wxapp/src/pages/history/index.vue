@@ -24,10 +24,7 @@ export default {
   },
   onLoad: function (options) {
     var that = this
-    var host = 'http://127.0.0.1:3030'
-    if (process.env.NODE_ENV === 'production') {
-      host = 'https://www.clayhuang.cn/everyday'
-    }
+    var host = 'https://www.clayhuang.cn/everyday'
     wx.request({
       url: host + '/api/daily/everyday',
       success: function (res) {
