@@ -76,10 +76,10 @@ getEverydayListFromRedis = async () => {
       return false
     }
     var dateKeys = Object.keys(res)
-    var resultList = {}
+    var resultList = []
     var count = 0
     dateKeys.forEach(key => {
-      resultList[key] = JSON.parse(res[key])
+      resultList.push(JSON.parse(res[key]))
       if (count++ === 10) {
         return resultList
       }

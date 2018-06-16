@@ -3,7 +3,7 @@
     <img :src='imgurl' />
     <div>
       <p>{{title}}</p>
-      <p>{{uploadtime}}</p>
+      <p>{{date}}</p>
     </div>
 
   </div>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  props: ['imgurl', 'title', 'uploadtime']
+  props: ['imgurl', 'title', 'date']
 }
 </script>
 

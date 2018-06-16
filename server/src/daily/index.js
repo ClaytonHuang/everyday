@@ -4,7 +4,14 @@ const config = require('config')
 const { getEverydayPage, getToday } = require('./spider')
 const moment = require('moment')
 
-// getEverydayPage()
+/**
+ * 第一次启动时，爬取所有需要的页面
+ */
+getEverydayPage()
+
+/**
+ * 获取今日的更新
+ */
 getToday()
 
 /**
