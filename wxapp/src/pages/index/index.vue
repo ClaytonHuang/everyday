@@ -1,5 +1,5 @@
 <template>
-  <show-oneday :dailyUrl='dailyUrl' :height='height'></show-oneday>
+  <show-oneday :dailyUrl='dailyUrl' :width='width' :height='height'></show-oneday>
 </template>
 
 <script>
@@ -18,7 +18,6 @@ export default {
   onLoad: function (options) {
     var that = this
     var host = 'https://www.clayhuang.cn/everyday'
-    const screenWidth = wx.getSystemInfoSync().windowWidth
     wx.request({
       url: host + '/api/daily/today',
       success: function (res) {
@@ -26,7 +25,8 @@ export default {
         if (data.result) {
           const {message} = data
           that.dailyUrl = message.linkurl
-          that.height = (screenWidth * message.height) / message.width
+          that.width = message.width
+          that.height = message.height
         } else {
           console.log('error')
         }

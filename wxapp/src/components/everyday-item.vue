@@ -1,5 +1,5 @@
 <template>
-  <div class='everyday-item'>
+  <div class='everyday-item' @click="openSomeday">
     <img :src='imgurl' />
     <div>
       <p>{{title}}</p>
@@ -11,7 +11,12 @@
 
 <script>
 export default {
-  props: ['imgurl', 'title', 'date']
+  props: ['imgurl', 'title', 'date'],
+  methods: {
+    openSomeday () {
+      this.$emit('somedayclick', {})
+    }
+  }
 }
 </script>
 

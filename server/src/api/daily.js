@@ -39,7 +39,6 @@ dailyRouter.get('/everyday', async ctx => {
   try {
     var res = {result: false}
     const everydayList = await getEverydayListFromRedis()
-    console.log(everydayList)
     if (!everydayList) {
       res.message = "获取历史列表失败" 
     } else {

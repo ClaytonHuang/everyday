@@ -1,10 +1,11 @@
 <template>
   <div>
-    <everyday-item v-for='iteminfo in everydaylist'
-      :key='iteminfo.uploadtime' 
-      :imgurl='iteminfo.imgurl'
-      :title='iteminfo.title'
-      :date='iteminfo.date'
+    <everyday-item v-for='item in everydaylist'
+    v-on:somedayclick="openSomeday(item)"
+      :key='item.uploadtime' 
+      :imgurl='item.imgurl'
+      :title='item.title'
+      :date='item.date'
     >
     </everyday-item>
   </div>
@@ -34,6 +35,16 @@ export default {
         }
       }
     })
+  },
+  methods: {
+    openSomeday ({linkurl, width, height}) {
+      const pageUrl = `./someday/main?linkurl=${linkurl}&width=${width}&height=${height}`
+      wx.navigateTo({
+        url: pageUrl,
+        success: function () {
+        }
+      })
+    }
   }
 }
 </script>
